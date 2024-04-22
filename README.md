@@ -25,7 +25,7 @@ The functions are split up into three categories: single randoms, lists/arrays o
 Every random number function is in the form [x,y) to be fully consistent.
 
 
-# Single randoms
+### Single randoms
 |Function           | Description|
 |-------------------|------------|
 number()            | returns a random decimal value in the range [0,1) |
@@ -33,7 +33,7 @@ numberBetween(x,y)  | returns a random value in the range [x,y)         |
 integerBetween(x,y) | returns a random integer in the range [x,y)       |
 boolean()           | randomly returns either true or false             |
 
-# Lists of randoms
+### Lists of randoms
 |Function                    | Description|
 |----------------------------|------------|
 numberList( size )           | returns a `size` sized list of decimal values in the range [0,1)  |
@@ -41,7 +41,7 @@ numberBetween( size, x, y )  | returns a `size` sized list of random values in t
 integerBetween( size, x ,y ) | returns a `size` sized list of random integers in the range [x,y) |
 boolean( size )              | returns a `size` sized list of random boolean values              |
 
-# array methods
+### array methods
 |Function             | Description|
 |---------------------|------------|
 pickFromList( array ) | returns a random element from [0,array.length) (can be undefined for empty/sparse arrays) |
