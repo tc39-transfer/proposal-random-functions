@@ -6,7 +6,7 @@ This proposal introduces a number of convenience functions for dealing with rand
 
 ## Meta
 * Stage 0
-* Authors: WhosyFox and Tab Atkins-Bittner
+* Authors: WhosyVox and Tab Atkins-Bittner
 * Champions: Tab Atkins-Bittner
 * Spec Text: currently this README
 
