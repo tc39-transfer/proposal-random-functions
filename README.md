@@ -24,4 +24,20 @@ It is intended that this proposal and the [Seeded Random proposal](https://githu
 * [Python's `random` module](https://docs.python.org/3/library/random.html)
 * [.Net's `Random` class](https://learn.microsoft.com/en-us/dotnet/api/system.random?view=net-8.0)
 * [Haskell's `RandomGen` interface](https://hackage.haskell.org/package/random-1.2.1.2/docs/System-Random.html)
+    * random u8/u16/u32/u64, either across the full range or between 0 and max
+    * <s>generate two RNGs from the starting RNG</s> (seeded-random use-case)
+    * random from any type with a range, or tuples of such
+    * random bytes
+    * random floats between 0 and 1
 * [Ruby's `Random` class](https://ruby-doc.org/core-2.4.0/Random.html)
+    * random floats between 0 and max
+    * random ints between 0 and max
+    * random bytes
+* [Common Lisp's `(random n)` function]([https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node133.html](http://clhs.lisp.se/Body/f_random.htm))
+    * random ints between 0 and max
+    * random floats between 0 and max
+* [Java's `Random` class](https://docs.oracle.com/javase/8/docs/api/java/util/Random.html)
+    * random doubles, defaulting to [0,1) but can be given any min/max bounds
+    * random ints (or longs), with any min/max bounds
+    * random bools
+    * random bytes
