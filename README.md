@@ -28,25 +28,25 @@ Every random number function is in the form [x,y) to be fully consistent.
 ### Single randoms
 |Function           | Description|
 |-------------------|------------|
-number()            | returns a random decimal value in the range [0,1) |
-numberBetween(x,y)  | returns a random value in the range [x,y)         |
-integerBetween(x,y) | returns a random integer in the range [x,y)       |
-boolean()           | randomly returns either true or false             |
+Random.number()            | returns a random decimal value in the range [0,1) |
+Random.numberBetween(x,y)  | returns a random value in the range [x,y)         |
+Random.integerBetween(x,y) | returns a random integer in the range [x,y)       |
+Random.boolean()           | randomly returns either true or false             |
 
 ### Lists of randoms
 |Function                    | Description|
 |----------------------------|------------|
-numberList( size )           | returns a `size` sized list of decimal values in the range [0,1)  |
-numberBetween( size, x, y )  | returns a `size` sized list of random values in the range [x,y)   |
-integerBetween( size, x ,y ) | returns a `size` sized list of random integers in the range [x,y) |
-boolean( size )              | returns a `size` sized list of random boolean values              |
+Random.numberList( size )           | returns a `size` sized list of decimal values in the range [0,1)  |
+Random.numberBetweenList( size, x, y )  | returns a `size` sized list of random values in the range [x,y)   |
+Random.integerBetweenList( size, x ,y ) | returns a `size` sized list of random integers in the range [x,y) |
+Random.booleanList( size )              | returns a `size` sized list of random boolean values              |
 
 ### array methods
 |Function             | Description|
 |---------------------|------------|
-pickFromList( array ) | returns a random element from [0,array.length) (can be undefined for empty/sparse arrays) |
-shuffle( array )      | performs an in-place random shuffle of the array                                          |
-asShuffled( array )   | returns a copy of the the provided array with the elements randomly shuffled              |
+Random.pickFromList( array ) | returns a random element from [0,array.length) (can be undefined for empty/sparse arrays) |
+Random.shuffle( array )      | performs an in-place random shuffle of the array                                          |
+Random.asShuffled( array )   | returns a copy of the the provided array with the elements randomly shuffled              |
 
 ## Interaction With Other Proposals
 
