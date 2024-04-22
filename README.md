@@ -11,9 +11,42 @@ Historically, JS has offered a very simple API for randomness: a `Math.random()`
 
 This proposal introduces a number of convenience functions for dealing with random values, to make common random-related use-cases easier to use. It groups all of these under a new namespace object - `Random` - for convenience and ease of understanding.
 
+Goals:
+* To introduce the lowest common set of functionality for random number generation
+* To build a consistent and easily understood interface, free of ambiguity
+* In time, to extend the API to the seeded-random-number proposal, making every function in `Random` available to the seeded PRNG
+
+
 ## Details
 
-TODO
+All functions will be available from a global `Random` namespace.
+The functions are split up into three categories: single randoms, lists/arrays of randoms, and array-specified methods.
+
+Every random number function is in the form [x,y) to be fully consistent.
+
+
+# Single randoms
+|Function           | Description|
+|-------------------|------------|
+number()            | returns a random decimal value in the range [0,1) |
+numberBetween(x,y)  | returns a random value in the range [x,y)         |
+integerBetween(x,y) | returns a random integer in the range [x,y)       |
+boolean()           | randomly returns either true or false             |
+
+# Lists of randoms
+|Function                    | Description|
+|----------------------------|------------|
+numberList( size )           | returns a `size` sized list of decimal values in the range [0,1)  |
+numberBetween( size, x, y )  | returns a `size` sized list of random values in the range [x,y)   |
+integerBetween( size, x ,y ) | returns a `size` sized list of random integers in the range [x,y) |
+boolean( size )              | returns a `size` sized list of random boolean values              |
+
+# array methods
+|Function             | Description|
+|---------------------|------------|
+pickFromList( array ) | returns a random element from [0,array.length) (can be undefined for empty/sparse arrays) |
+shuffle( array )      | performs an in-place random shuffle of the array                                          |
+asShuffled( array )   | returns a copy of the the provided array with the elements randomly shuffled              |
 
 ## Interaction With Other Proposals
 
