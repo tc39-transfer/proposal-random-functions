@@ -28,7 +28,7 @@ Every random number function is in the form [x,y) to be fully consistent.
 ### Single randoms
 |Function           | Description|
 |-------------------|------------|
-Random.number()            | returns a random decimal value in the range [0,1) |
+Random.random()            | returns a random decimal value in the range [0,1) |
 Random.numberBetween(x,y)  | returns a random value in the range [x,y)         |
 Random.integerBetween(x,y) | returns a random integer in the range [x,y)       |
 Random.boolean()           | randomly returns either true or false             |
@@ -36,7 +36,7 @@ Random.boolean()           | randomly returns either true or false             |
 ### Lists of randoms
 |Function                    | Description|
 |----------------------------|------------|
-Random.numberList( size )           | returns a `size` sized list of decimal values in the range [0,1)  |
+Random.randomList( size )               | returns a `size` sized list of decimal values in the range [0,1)  |
 Random.numberBetweenList( size, x, y )  | returns a `size` sized list of random values in the range [x,y)   |
 Random.integerBetweenList( size, x ,y ) | returns a `size` sized list of random integers in the range [x,y) |
 Random.booleanList( size )              | returns a `size` sized list of random boolean values              |
