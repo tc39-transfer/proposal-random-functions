@@ -13,3 +13,10 @@ This proposal introduces a number of convenience functions for dealing with rand
 ## Details
 
 TODO
+
+## Prior Art
+
+* [Python's `random` module](https://docs.python.org/3/library/random.html)
+* [.Net's `Random` class](https://learn.microsoft.com/en-us/dotnet/api/system.random?view=net-8.0)
+* [Haskell's `RandomGen` interface](https://hackage.haskell.org/package/random-1.2.1.2/docs/System-Random.html)
+* [Ruby's `Random` class](https://ruby-doc.org/core-2.4.0/Random.html)
