@@ -22,6 +22,13 @@ It is intended that this proposal and the [Seeded Random proposal](https://githu
 ## Prior Art
 
 * [Python's `random` module](https://docs.python.org/3/library/random.html)
+    * random float, between 0 and 1
+    * random ints, with any min/max bounds (and any step)
+    * random bytes
+    * random selection (or N selections with replacement) from a list, with optional weights
+    * random sampling (or N samples, *without* replacement) from a list, with optional counts
+    * randomly shuffle an array
+    * sample various random distributions: binomal, triangular, beta, exponential, gamma, normal, log-normal, von Mises, Pareto, Weibull
 * [.Net's `Random` class](https://learn.microsoft.com/en-us/dotnet/api/system.random?view=net-8.0)
     * random ints, with any min/max bounds
     * random floats, with any min/max bounds
