@@ -52,3 +52,10 @@ It is intended that this proposal and the [Seeded Random proposal](https://githu
     * random ints (or longs), with any min/max bounds
     * random bools
     * random bytes
+* [JS `genTest` library](https://www.npmjs.com/package/gentest)
+    * random ints (within certain classes)
+    * random characters
+    * random "strings" (relatively short but random lengths, random characters)
+    * random bools
+    * random selection (N, with replacement) from a list
+    * custom random generators
