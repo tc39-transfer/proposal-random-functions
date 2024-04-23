@@ -60,8 +60,13 @@ The second parameter does not necessarily need to be the largest. In f(x,y) for 
 
 When either argument is NaN, the expected output is also NaN.
 
-It is still an open question of how and when to clamp values of ±Infinity.
-Equally, it's not yet clear how to handle generating an integer when passed non-integer values, be that throwing a TypeError, rounding down or discarding the fractional component.
+
+### Some open questions
+
+It is not yet clear how and when to clamp values of ±Infinity.
+
+Equally, we don't yet know the best way to handle generating an integer when passed non-integer values, be that throwing a TypeError, rounding down or discarding the fractional component.
+
 
 ## Interaction With Other Proposals
 
