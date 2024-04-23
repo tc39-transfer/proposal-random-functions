@@ -54,8 +54,10 @@ Random.asShuffled( array )   | returns a copy of the the provided array with the
 
 
 ### Behaviour
-Function that take both an upper and lower bound (such as numberBetween) should require both arguments be passed in. This is to ensure that the intent of the code is clear from a glance. Other languages are inconsistent and infer a single parameter to be a range of either \[0,x), \[1,x).
+Function that take both an upper and lower bound (such as `numberBetween`) should require both arguments be passed in. This is to ensure that the intent of the code is clear from a glance. Other languages are inconsistent and infer a single parameter to be a range of either \[0,x), \[1,x).
+
 The second parameter does not necessarily need to be the largest. In f(x,y) for y>x the expected range is \[x,y), but for y<x you may get an output (x,y\]. And in the case of x=y, the value will be exactly x.
+
 When either argument is NaN, the expected output is also NaN.
 
 It is still an open question of how and when to clamp values of ±Infinity.
