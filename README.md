@@ -12,17 +12,21 @@ Historically, JS has offered a very simple API for randomness: a `Math.random()`
 This proposal introduces a number of convenience functions for dealing with random values, to make common random-related use-cases easier to use. It groups all of these under a new namespace object - `Random` - for convenience and ease of understanding.
 
 Goals:
-* To introduce the lowest common set of functionality for random number generation
-* To build a consistent and easily understood interface, free of ambiguity
-* In time, to extend the API to the seeded-random-number proposal, making every function in `Random` available to the seeded PRNG
+* To introduce at least the lowest common set of functionality for generating random numbers
+* To build a consistent and easily understood API
 
+Applications currently outside the scope of this proposal:
+* Random string functions
+* Specialised probability functions
+* Iterator/Generators
+
+Anything on this list would ideally require a libray or separate proposal.
 
 ## Details
 
 All functions will be available from a global `Random` namespace.
-The functions are split up into three categories: single randoms, lists/arrays of randoms, and array-specified methods.
 
-Every random number function is in the form [x,y) to be fully consistent.
+The output of every Random numberic function is in the form [x,y) (that is, random value n such that x<=n<y) for consistency.
 
 
 ### Single randoms
@@ -47,6 +51,15 @@ Random.booleanList( size )              | returns a `size` sized list of random 
 Random.pickFromList( array ) | returns a random element from [0,array.length) (can be undefined for empty/sparse arrays) |
 Random.shuffle( array )      | performs an in-place random shuffle of the array                                          |
 Random.asShuffled( array )   | returns a copy of the the provided array with the elements randomly shuffled              |
+
+
+### Behaviour
+Function that take both an upper and lower bound (such as numberBetween) should require both arguments be passed in. This is to ensure that the intent of the code is clear from a glance. Other languages are inconsistent and infer a single parameter to be a range of either \[0,x), \[1,x).
+The second parameter does not necessarily need to be the largest. In f(x,y) for y>x the expected range is \[x,y), but for y<x you may get an output (x,y\]. And in the case of x=y, the value will be exactly x.
+When either argument is NaN, the expected output is also NaN.
+
+It is still an open question of how and when to clamp values of ±Infinity.
+Equally, it's not yet clear how to handle generating an integer when passed non-integer values, be that throwing a TypeError, rounding down or discarding the fractional component.
 
 ## Interaction With Other Proposals
 
