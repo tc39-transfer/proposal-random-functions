@@ -24,48 +24,45 @@ Anything on this list would ideally require a libray or separate proposal.
 
 ## Details
 
-All functions will be available from a global `Random` namespace.
+This proposal suggests that all new Random-related functions be accessible from a global `Random` namespace.
 
-The output of every Random numberic function is in the form [x,y) (that is, random value n such that x<=n<y) for consistency.
+This does not impact either the Crypto methods or Math.random, which would remain as-are.
 
+
+## Example methods
 
 ### Single randoms
 |Function           | Description|
 |-------------------|------------|
-Random.random()            | returns a random decimal value in the range [0,1) |
-Random.numberBetween( x, y )  | returns a random value in the range [x,y)         |
-Random.integerBetween( x, y ) | returns a random integer in the range [x,y)       |
-Random.boolean()           | randomly returns either true or false             |
+random()            | return a random decimal value in the range [0,1) |
+numberBetween( x, y )  | return a random value between x and y         |
+integerBetween( x, y ) | return a random integer between x and y       |
+boolean()           | randomly returns either true or false             |
 
 ### Lists of randoms
 |Function                    | Description|
 |----------------------------|------------|
-Random.randomList( size )               | returns a `size` sized list of decimal values in the range [0,1)  |
-Random.numberBetweenList( size, x, y )  | returns a `size` sized list of random values in the range [x,y)   |
-Random.integerBetweenList( size, x, y ) | returns a `size` sized list of random integers in the range [x,y) |
-Random.booleanList( size )              | returns a `size` sized list of random boolean values              |
+randomList( size )               | return a `size` sized list of decimal values in the range [0,1)  |
+numberBetweenList( size, x, y )  | return a `size` sized list of random values in the range [x,y)   |
+integerBetweenList( size, x, y ) | return a `size` sized list of random integers in the range [x,y) |
+booleanList( size )              | return a `size` sized list of random boolean values              |
 
 ### array methods
 |Function             | Description|
 |---------------------|------------|
-Random.pickFromList( array ) | returns a random element from [0,array.length) (can be undefined for empty/sparse arrays) |
-Random.shuffle( array )      | performs an in-place random shuffle of the array                                          |
-Random.asShuffled( array )   | returns a copy of the the provided array with the elements randomly shuffled              |
+pickFromList( array ) | return a random element from [0,array.length) (can be undefined for empty/sparse arrays) |
+shuffle( array )      | perform an in-place random shuffle of the array                                          |
+asShuffled( array )   | return a copy of the the provided array with the elements randomly shuffled              |
 
-
-### Behaviour
-Function that take both an upper and lower bound (such as `numberBetween`) should require both arguments be passed in. This is to ensure that the intent of the code is clear from a glance. Other languages are inconsistent and infer a single parameter to be a range of either \[0,x), \[1,x).
-
-The second parameter does not necessarily need to be the largest. In f(x,y) for y>x the expected range is \[x,y), but for y<x you may get an output (x,y\]. And in the case of x=y, the value will be exactly x.
-
-When either argument is NaN, the expected output is also NaN.
 
 
 ### Some open questions
 
-It is not yet clear how and when to clamp values of ±Infinity.
+How and when to clamp input values of ±Infinity.
 
-Equally, we don't yet know the best way to handle generating an integer when passed non-integer values, be that throwing a TypeError, rounding down or discarding the fractional component.
+Should integers for range (x,y) be generated as [x,y) or \[x,y\]?
+
+How should integers be generated when passed non-integer boundaries?
 
 
 ## Interaction With Other Proposals
