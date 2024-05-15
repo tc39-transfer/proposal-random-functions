@@ -102,6 +102,7 @@ It is intended that this proposal and the [Seeded Random proposal](https://githu
     * random ints (or longs), with any min/max bounds
     * random bools
     * random bytes
+    * sample Gaussian distribution
 * [JS `genTest` library](https://www.npmjs.com/package/gentest)
     * random ints (within certain classes)
     * random characters
