@@ -30,6 +30,7 @@ As of today the main way to generate a random number (outside of library inclusi
 
 The common pattern for an integer is `Math.floor(Math.random()*(maxValue-MinValue)+maxValue)`. This is, at best, cumbersome.
 This proposal would tidy it up to something closer to `Random.integerBetween(minValue,maxValue)`.
+
 (This is akin to how we can use `Array.at(-1)` rather than `Array[Array.length-1]` to convey the intent of the code.)
 
 
