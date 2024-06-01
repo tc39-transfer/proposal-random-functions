@@ -24,7 +24,17 @@ This proposal suggests that all new Random-related functions be accessible from 
 This does not impact either the Crypto methods or Math.random, which would remain as-are.
 
 
-## Example methods
+## The current state of Random
+
+As of today the main way to generate a random number (outside of library inclusion) is by direclty manipulating the output of `Math.random()`.
+
+The common pattern for an integer is `Math.floor(Math.random()*(maxValue-MinValue)+maxValue)`. This is, at best, cumbersome.
+This proposal would tidy it up to something closer to `Random.integerBetween(minValue,maxValue)`.
+(This is akin to how we can use `Array.at(-1)` rather than `Array[Array.length-1]` to convey the intent of the code.)
+
+
+## Example methods that may warrant inclusion
+This is neither exhaustive, concrete concrete or yet well-researched, but merely serves as an example.
 
 ### Single randoms
 |Function           | Description|
@@ -47,7 +57,7 @@ pickFromList( array ) | return a random element from the array |
 shuffle( array )      | perform an in-place random shuffle of the array                                          |
 asShuffled( array )   | return a copy of the the provided array with the elements randomly shuffled              |
 
-There might also be a good case to include a method for generating normal distributions.
+There might also be a good case to include a method for generating [Normal Distributions](https://en.wikipedia.org/wiki/Normal_distribution).
 
 ## Interaction With Other Proposals
 
