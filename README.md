@@ -9,18 +9,13 @@
 
 Historically, JS has offered a very simple API for randomness: a `Math.random()` function that returns a random value from a uniform distribution in the range [0,1), with no further details. This is a perfectly adequate primitive, but most actual applications end up having to wrap this into other functions to do something useful, such as obtaining random *integers* in a particular range, or sampling a *normal* distribution. While it's not hard to write many of these utility functions, doing so *correctly* can be non-trivial: off-by-one errors are easy to hit even in simple "simulate a die roll" cases.
 
-This proposal introduces a number of convenience functions for dealing with random values, to make common random-related use-cases easier to use. It groups all of these under a new namespace object - `Random` - for convenience and ease of understanding.
+This proposal aims to introduces a number of convenient functions for dealing with random values, to make common random-related code both easier to use and less suseptable to errors.
 
 Goals:
-* To introduce at least the lowest common set of functionality for generating random numbers
-* To build a consistent and easily understood API
+* To introduce at least the lowest common set of methods for properly generating random numbers
+* To build a consistent API between the pre-seeded and seeded PRNG proposal
+* To use readily understood method names, in line with what has been done in other areas of the language (e.g. `Array.toSorted`, `Aray.at`, `Object.fromEntries`)
 
-Applications currently outside the scope of this proposal:
-* Random string functions
-* Specialised probability functions
-* Iterator/Generators
-
-Anything on this list would ideally require a libray or separate proposal.
 
 ## Details
 
@@ -35,7 +30,6 @@ This does not impact either the Crypto methods or Math.random, which would remai
 |Function           | Description|
 |-------------------|------------|
 random()            | return a random decimal value in the range [0,1) |
-numberBetween( x, y )  | return a random value between x and y         |
 integerBetween( x, y ) | return a random integer between x and y       |
 boolean()           | randomly returns either true or false             |
 
@@ -43,27 +37,17 @@ boolean()           | randomly returns either true or false             |
 |Function                    | Description|
 |----------------------------|------------|
 randomList( size )               | return a `size` sized list of decimal values in the range [0,1)  |
-numberBetweenList( size, x, y )  | return a `size` sized list of random values in the range [x,y)   |
 integerBetweenList( size, x, y ) | return a `size` sized list of random integers in the range [x,y) |
 booleanList( size )              | return a `size` sized list of random boolean values              |
 
 ### array methods
 |Function             | Description|
 |---------------------|------------|
-pickFromList( array ) | return a random element from [0,array.length) (can be undefined for empty/sparse arrays) |
+pickFromList( array ) | return a random element from the array |
 shuffle( array )      | perform an in-place random shuffle of the array                                          |
 asShuffled( array )   | return a copy of the the provided array with the elements randomly shuffled              |
 
-
-
-### Some open questions
-
-How and when to clamp input values of ±Infinity.
-
-Should integers for range (x,y) be generated as [x,y) or \[x,y\]?
-
-How should integers be generated when passed non-integer boundaries?
-
+There might also be a good case to include a method for generating normal distributions.
 
 ## Interaction With Other Proposals
 
