@@ -60,6 +60,28 @@ asShuffled( array )   | return a copy of the the provided array with the element
 
 There might also be a good case to include a method for generating [Normal Distributions](https://en.wikipedia.org/wiki/Normal_distribution).
 
+
+## Q&A
+
+### Why use a new `Random` namespace?
+
+Firstly the reason is to avoid polluting the existing `Math` namespace with a set of collective methods related to randomness.
+
+Secondly...
+
+### Why should the methods be symmetric with the [Seeded Random proposal](https://github.com/tc39/proposal-seeded-random/)?
+
+There are some strong benefits in keeping these methods synchronised with the Seeded PRNG.
+
+For methods or classes which require some element of randomness, test suites could take a fixed-seed PRNG with certain outcomes. And then, for the application itself, passing in `Random` should yield the same set of methods but with a random seed.
+
+### Couldn't you just intantiate a Seeded PRNG with `Math.random()`?
+
+I expect you could absolutely do that. It would be more verbose and remove some of the ease-of-use of this proposal however.
+
+It would also require a new proposal to add these methods to the Seeded PRNG, as this wouldn't solve some of the original issues.
+
+
 ## Interaction With Other Proposals
 
 It is intended that this proposal and the [Seeded Random proposal](https://github.com/tc39/proposal-seeded-random/) expose the same APIs. Either proposal can advance ahead of the other, however. This proposal is intentionally not touching seeded randomness, instead focusing on functions that are agnostic as to their random source.
