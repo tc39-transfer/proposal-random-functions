@@ -83,23 +83,29 @@ it is expected that the committee's feedback will reduce them to a smaller set.
 ## Distribution Methods
 
 [Python includes a decent selection of distributions.](https://docs.python.org/3/library/random.html#discrete-distributions)
-We should probably *at least* include the normal/gaussian distribution, given its high degree of usefullness. Should we include more? All of Python's distributions? Other distributions?
+We should probably *at least* include the normal/gaussian distribution, given its high degree of usefulness. Should we include more? All of Python's distributions? Other distributions?
 
-* `normal(mean=0, stdev=1)`
-* `lognormal(mean=0, stdev=1)`
-* `vonmisse(mean=0, kappa=0)`
-* `binomial(n, p=0.5)`
-* `triangular(lo=0, hi=1, mode=(lo+hi)/2)`
-* `expo(lambda=1)`
-* `beta(alpha, beta)`
-* `gamma(alpha, beta)`
-* `pareta(alpha)`
-* `weibull(alpha, beta)`
+* `normal(mean=0, stdev=1)`: the gaussian/normal distribution
+* `lognormal(mean=0, stdev=1)`: the [lognormal distribution](https://en.wikipedia.org/wiki/Log-normal_distribution) - a distribution whose *log* has a `normal(mean,stdev)` distribution
+* `vonmisse(mean=0, kappa=0)`: the [von Misse distribution](https://en.wikipedia.org/wiki/Von_Mises_distribution), basically a gaussian over a circle
+* `triangular(lo=0, hi=1, mode=(lo+hi)/2)`: a [triangular distribution](https://en.wikipedia.org/wiki/Triangular_distribution) with a high point of `mode`.
+* `exponential(lambda=1)`: an [exponential distribution](https://en.wikipedia.org/wiki/Exponential_distribution) (from 0 to infinity). (The mean is `1/lambda`.)
+* `binomial(n, p=0.5)`: the [binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution) - how many successes in N trials with P chance of success? (sampling with replacement)
+* `geometric(p=.5)`: the [geometric distribution](https://en.wikipedia.org/wiki/Geometric_distribution) - how many failures before the first success, with P chance of success? (sampling with replacement)
+* `hypergeometric(n, N, K)`: the [hyper-geometric distribution](https://en.wikipedia.org/wiki/Hypergeometric_distribution) - how many successes in n trials if exactly K of the N possible outcomes are a success? (sampling *without* replacement)
+* `beta(alpha, beta)`: the [beta distribution](https://en.wikipedia.org/wiki/Beta_distribution)
+* `gamma(alpha, beta)`: the [gamma distribution](https://en.wikipedia.org/wiki/Gamma_distribution)
+* `pareto(alpha)`: the [Pareto distribution](https://en.wikipedia.org/wiki/Pareto_distribution)
+* `weibull(alpha, beta)`: the [Weibull distribution](https://en.wikipedia.org/wiki/Weibull_distribution)
 
 ## Byte Methods
 
 * `bytes(n)`: Returns a `Uint8Array` of the specified length, filled with random bytes.
 * `fillBytes(buffer)`: Fills the passed typed array/view/etc with random bytes. (Pass views to fill only a chunk of an array.)
+
+## Other Value Methods
+
+* `boolean(p=0.5)`: Returns a bool, with propability `p` of returning `true`. (Exactly equivalent to `Random.random() < p`, so possibly not worth it?)
 
 # Part 3: Specifying The PRNG
 
