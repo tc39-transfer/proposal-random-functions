@@ -79,6 +79,7 @@ it is expected that the committee's feedback will reduce them to a smaller set.
     * `counts`, an iterable of non-negative integers: provides the "multiplicity" of the entries in the matching index from `coll`. `Random.take(["a", "b"], 2, {counts:[2, 3]})` is identical to `Random.take(["a", "a", "b", "b", "b"], 2)`. (In particular, this example could return "a" or "b" multiple times, even tho it's not using replacement, just like the desugared example can.) If omitted, all counts are `1`. If the iterable is too short, missing entries are treated as `0`; if too long, excess entries are ignored.
     * `weights`, an iterable of non-negative numbers: provides the "weight" for the entries in the matching index from `coll`, allowing some entries to be more likely to be selected than others. If omitted, all weights are `1`. If the iterable is too short, missing entries are treated as `0`; if too long, excess entries are ignored.
     * `counts` and `weights` can be used together; the specified weight for an entry is treated as applying to each of the multiple implied entries (not divided between them). That is, `Random.take(["a", "b"], 2, {counts: [2, 3], weights:[1, 2]})` is equivalent to `Random.take(["a", "a", "b", "b", "b"], 2, {weights: [1, 1, 2, 2, 2]})`.
+* `sample(coll, {counts, weights})`: Returns one item from the collection. Options are identical to `take()`. `Random.sample(coll, options)` is identical to `Random.take(coll, 1, options)[0]`, just without constructing the intermediate `Array`.
 
 ## Distribution Methods
 
