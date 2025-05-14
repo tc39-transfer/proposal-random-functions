@@ -16,80 +16,107 @@ Goals:
 * To build a consistent API between the pre-seeded and seeded PRNG proposal
 * To use readily understood method names, in line with what has been done in other areas of the language (e.g. `Array.toSorted`, `Aray.at`, `Object.fromEntries`)
 
+The proposal is split across four somewhat-independent parts:
 
-## Details
+1. Creating a new `Random` namespace object to host the methods.
+2. Defining several new families of random functions.
+3. Specifying the PRNG algorithm. 
+4. Applying all the functions to `SeededPRNG` as well.
 
-This proposal suggests that all new Random-related functions be accessible from a global `Random` namespace.
+# Part 1: The `Random` Namespace
 
-This does not impact either the Crypto methods or Math.random, which would remain as-are.
+The current `Math.random()` method is on the `Math` namespace object, 
+presumably just because it had to live *somewhere* 
+and since it returns a number `Math` seemed vaguely appropriate.
 
+We propose that a new `Random` namespace object be created, 
+to host all of the proposed methods of this proposal. 
+A new `Random` namespace obviates the need to put "random" into the names of all the new methods.
+Several of the proposed new methods also do not directly produce numbers, 
+so putting them on `Math` seems inappropriate.
 
-## The current state of Random
+The existing `Math.random()` method will be left as-is (back compat requires that), 
+but will also be duplicated into `Random`, as `Random.random()`, for consistency.
 
-As of today the main way to generate a random number (outside of library inclusion) is by direclty manipulating the output of `Math.random()`.
+We do not propose doing anything with the existing `Crypto` namespace methods that deal with randomness.
+They are specifically generating *cryptographically strong* randomness,
+which is not a concern of these methods in general,
+and their API shapes are geared towards cryptographic use-cases,
+which are not necessarily reasonable for JS API design in general.
 
-The common pattern for an integer is `Math.floor(Math.random()*(maxValue-MinValue)+maxValue)`. This is, at best, cumbersome.
-This proposal would tidy it up to something closer to `Random.integerBetween(minValue,maxValue)`.
+# Part 2: The New Random Functions
 
-(This is akin to how we can use `Array.at(-1)` rather than `Array[Array.length-1]` to convey the intent of the code.)
+There is a very large family of functions we could *potentially* include.
+The list here is, at this point, intentionally a bit large to show off the possibilities;
+it is expected that the committee's feedback will reduce them to a smaller set.
 
+## Random Numbers
 
-## Example methods that may warrant inclusion
-This is neither exhaustive, concrete concrete or yet well-researched, but merely serves as an example.
+* `random()`: Identical to the existing `Math.random()`. Takes no arguments, returns a random Number in the range `[0, 1)` (that is, containing 0 but not 1), with a uniform distribution.
+* `number(lo, hi, step?)`: Returns a random `Number` in the range `[lo, hi)` (that is, containing `lo` but not `hi`), with a uniform distribution. Similar to the `Iterator.range()` proposal, third argument can be a step value, or an options bag specifying the step value and whether or not to include the endpoint. 
+    * If `step` is defined, instead generates a random integer `R` and returns `lo + step*R`, with `R` ranging from 0 to a maximum that ensures the return value is less than or equal to `hi`. (Details below.) 
+    * All arguments must be `Number`s, or else `TypeError`.
+* `int(lo, hi, step?)`: Returns a random integral `Number` in the range `[lo, hi]` (that is, containing both `lo` and `hi`), with a uniform distribution. `step` works the same as in `number()`. 
+    * All arguments must be integers, or else `TypeError`.
+* `bigint(lo, hi, step?)`: Identical to `int()`, but returns a `BigInt` instead. All arguments must be `BitInt`s, or else `TypeError`.
 
-### Single randoms
-|Function           | Description|
-|-------------------|------------|
-random()            | return a random decimal value in the range [0,1) |
-integerBetween( x, y ) | return a random integer between x and y       |
-boolean()           | randomly returns either true or false             |
+> [!NOTE]
+> Do we want to enforce an ordering for `lo` and `hi`, or allow them to be out of order? I lean towards allowing them in either order, especially since for `number()` the range is asymmetric; whether you want `[-2, -5)` or `(-2, -5]` can be application-specific. Also, which value is "low" when negatives are used is ambiguous anyway; `Random.number(-2, -5)` and `Random.number(-5, -2)` both potentially look correct.
 
-### Lists of randoms
-|Function                    | Description|
-|----------------------------|------------|
-randomList( size )               | return a `size` sized list of decimal values in the range [0,1)  |
-integerBetweenList( size, x, y ) | return a `size` sized list of random integers in the range [x,y) |
-booleanList( size )              | return a `size` sized list of random boolean values              |
+> [!NOTE]
+> The `step` behavior for these methods is taken directly from [CSS's `random()` function](https://drafts.csswg.org/css-values-5/#random).
+> It's also [being proposed for `Iterator.range()`](https://github.com/tc39/proposal-iterator.range/issues/64#issuecomment-2881243363).
 
-### array methods
-|Function             | Description|
-|---------------------|------------|
-pickFromList( array ) | return a random element from the array |
-shuffle( array )      | perform an in-place random shuffle of the array                                          |
-asShuffled( array )   | return a copy of the the provided array with the elements randomly shuffled              |
+> [!NOTE]
+> It's probably generally a good thing to match [`Iterator.range()`](https://github.com/tc39/proposal-iterator.range/) in the signatures, which would mean including `inclusive` as an options-bag argument, and defaulting `int()` and `bigint()` (and `number()` using a `step`) to exclude their `hi` value. That would mean, to simulate a d6, you'd need to write either `Random.int(1, 7)` or `Random.int(1, 6, {inclusive:true})`. I'm unsure if the consistency is worth it, tho... 
 
-There might also be a good case to include a method for generating [Normal Distributions](https://en.wikipedia.org/wiki/Normal_distribution).
+## Collection Methods
 
+* `shuffle(arr)`: Shuffles an `Array` in-place. Argument must be an `Array` or Array-like.
+* `toShuffled(coll)`: Returns a fresh `Array` containing the shuffled values from `coll`, which can be any iterable.
+* `take(coll, n, {replace, counts, weights})`: Returns an `Array` containing `n` randomly-selected entries from `coll` (which must be an iterable). Optional arguments are:
+    * `replace`, a boolean: if `false` (the default), takes without replacement; every value in the returned Array will be from a unique index in the original collection. (If `n` is larger than the length of `coll`, throw a `RangeError`?) If `true`, takes with replacement; values in the returned Array can be repeats (and you can take any amount of them without error).
+    * `counts`, an iterable of non-negative integers: provides the "multiplicity" of the entries in the matching index from `coll`. `Random.take(["a", "b"], 2, {counts:[2, 3]})` is identical to `Random.take(["a", "a", "b", "b", "b"], 2)`. (In particular, this example could return "a" or "b" multiple times, even tho it's not using replacement, just like the desugared example can.) If omitted, all counts are `1`. If the iterable is too short, missing entries are treated as `0`; if too long, excess entries are ignored.
+    * `weights`, an iterable of non-negative numbers: provides the "weight" for the entries in the matching index from `coll`, allowing some entries to be more likely to be selected than others. If omitted, all weights are `1`. If the iterable is too short, missing entries are treated as `0`; if too long, excess entries are ignored.
+    * `counts` and `weights` can be used together; the specified weight for an entry is treated as applying to each of the multiple implied entries (not divided between them). That is, `Random.take(["a", "b"], 2, {counts: [2, 3], weights:[1, 2]})` is equivalent to `Random.take(["a", "a", "b", "b", "b"], 2, {weights: [1, 1, 2, 2, 2]})`.
 
-## Q&A
+## Distribution Methods
 
-### Why use a new `Random` namespace?
+[Python includes a decent selection of distributions.](https://docs.python.org/3/library/random.html#discrete-distributions)
+We should probably *at least* include the normal/gaussian distribution, given its high degree of usefullness. Should we include more? All of Python's distributions? Other distributions?
 
-Firstly the reason is to avoid polluting the existing `Math` namespace with a set of collective methods related to randomness.
+* `normal(mean=0, stdev=1)`
+* `lognormal(mean=0, stdev=1)`
+* `vonmisse(mean=0, kappa=0)`
+* `binomial(n, p=0.5)`
+* `triangular(lo=0, hi=1, mode=(lo+hi)/2)`
+* `expo(lambda=1)`
+* `beta(alpha, beta)`
+* `gamma(alpha, beta)`
+* `pareta(alpha)`
+* `weibull(alpha, beta)`
 
-Secondly...
+## Byte Methods
 
-### Why should the methods be symmetric with the [Seeded Random proposal](https://github.com/tc39/proposal-seeded-random/)?
+* `bytes(n)`: Returns a `Uint8Array` of the specified length, filled with random bytes.
+* `fillBytes(buffer)`: Fills the passed typed array/view/etc with random bytes. (Pass views to fill only a chunk of an array.)
 
-There are some strong benefits in keeping these methods synchronised with the Seeded PRNG.
+# Part 3: Specifying The PRNG
 
-For methods or classes which require some element of randomness, test suites could take a fixed-seed PRNG with certain outcomes. And then, for the application itself, passing in `Random` should yield the same set of methods but with a random seed.
+`Math.random()` was historically unspecified, and because some benchmarks unintentionally depended on it, has been driven toward a fast but terrible PRNG algorithm in implementations.
 
-### Couldn't you just intantiate a Seeded PRNG with `Math.random()`?
+We propose that the `Random` methods use a *specified* PRNG algorithm, specifically the same one used by the [Seeded Random proposal](https://github.com/tc39/proposal-seeded-random/) - ChaCha12. This algorithm produces high-quality pseudo-randomness (but intentionally not cryptographic quality), and has good performance characteristics relative to PRNGs of similar quality. Plus, it would mean a shared implementation between the two very similar proposals, which is likely appealing to implementations, since all of the `Random` methods are intended to appear on `SeededPRNG` as well.
 
-I expect you could absolutely do that. It would be more verbose and remove some of the ease-of-use of this proposal however.
+We will probably leave the choice of initial PRNG state to still be up to the UA.
 
-It would also require a new proposal to add these methods to the Seeded PRNG, as this wouldn't solve some of the original issues.
+# Part 4: Interaction with `SeededPRNG`
 
+It is intended that this proposal and the [Seeded Random proposal](https://github.com/tc39/proposal-seeded-random/) expose the same APIs; every method on `Random` should exist on `SeededPRNG` objects as well. Either proposal can advance ahead of the other, however. This proposal is intentionally not touching seeded randomness, instead focusing on functions that are agnostic as to their random source.
 
-## Interaction With Other Proposals
-
-It is intended that this proposal and the [Seeded Random proposal](https://github.com/tc39/proposal-seeded-random/) expose the same APIs. Either proposal can advance ahead of the other, however. This proposal is intentionally not touching seeded randomness, instead focusing on functions that are agnostic as to their random source.
-
-## Prior Art
+# Prior Art
 
 * [Python's `random` module](https://docs.python.org/3/library/random.html)
-    * random float, between 0 and 1
+    * random float, with any min/max bounds (and any step)
     * random ints, with any min/max bounds (and any step)
     * random bytes
     * random selection (or N selections with replacement) from a list, with optional weights
