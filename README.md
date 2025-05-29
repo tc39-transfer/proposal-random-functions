@@ -14,7 +14,7 @@ This proposal aims to introduces a number of convenient functions for dealing wi
 Goals:
 * To introduce at least the lowest common set of methods for properly generating random numbers
 * To build a consistent API between the pre-seeded and seeded PRNG proposal
-* To use readily understood method names, in line with what has been done in other areas of the language (e.g. `Array.toSorted`, `Aray.at`, `Object.fromEntries`)
+* To use readily understood method names, in line with what has been done in other areas of the language (e.g. `Array.toSorted`, `Array.at`, `Object.fromEntries`)
 
 The proposal is split across four somewhat-independent parts:
 
@@ -58,7 +58,7 @@ it is expected that the committee's feedback will reduce them to a smaller set.
     * All arguments must be `Number`s, or else `TypeError`.
 * `int(lo, hi, step?)`: Returns a random integral `Number` in the range `[lo, hi]` (that is, containing both `lo` and `hi`), with a uniform distribution. `step` works the same as in `number()`. 
     * All arguments must be integers, or else `TypeError`.
-* `bigint(lo, hi, step?)`: Identical to `int()`, but returns a `BigInt` instead. All arguments must be `BitInt`s, or else `TypeError`.
+* `bigint(lo, hi, step?)`: Identical to `int()`, but returns a `BigInt` instead. All arguments must be `BigInt`s, or else `TypeError`.
 
 > [!NOTE]
 > Do we want to enforce an ordering for `lo` and `hi`, or allow them to be out of order? I lean towards allowing them in either order, especially since for `number()` the range is asymmetric; whether you want `[-2, -5)` or `(-2, -5]` can be application-specific. Also, which value is "low" when negatives are used is ambiguous anyway; `Random.number(-2, -5)` and `Random.number(-5, -2)` both potentially look correct.
