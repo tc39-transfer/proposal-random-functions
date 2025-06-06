@@ -94,6 +94,7 @@ identical to `TypedArray.prototype.fill()`.
 > Note that "random bytes" produces a uniform distribution of values for the *integer types*, like `Uint8Array`, `Int32Array`, etc.
 > It does *not* do the same for the float types like `Float64Array`.
 > Those types do not have any straightforward definition of "uniform" over their range of possible values.
+> If you need something smarter, you'll need to write it yourself to meet your exact use-cases.
 
 # Interaction with `Random.Seeded`
 
@@ -147,4 +148,4 @@ All of the above functions will also be defined on the [`Random.Seeded` class](h
 # History
 
 * 2024-04: Initial Stage 0 proposal authored.
-* 2025-05: Proposal was accepted for Stage 1, with edits
+* 2025-05: Proposal was accepted for Stage 1, somewhat stripped down (TODO: link to notes)
