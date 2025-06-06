@@ -1,4 +1,4 @@
-# Random Namespace and Functions
+# Simple Random Functions
 
 * Stage 1
 * Authors: WhosyVox and Tab Atkins-Bittner
