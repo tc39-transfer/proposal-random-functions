@@ -83,23 +83,13 @@ Trivial, already ubiquitous in the literature.
 
 Drawn from <https://hal.science/hal-03282794v5/document>
 
-function γsectionOO(a,b)
-	g = γ(a,b)
-	hi = ceilint(a,b,g)
-	k = rand(DiscreteUniform(1, hi-1))
-	(k1,k2) = splitint64(k)
-	if abs(a) <= abs(b)
-		return 4*(b/4-k1*g)-k2*g
-	else
-		return 4*(a/4+k1*g)+k2*g
-	end
-
 1. Let |step| be the largest step between floats between |min| and |max|.
 2. Let |values| be ceilint(|min|, |max|, |step|).
 3. Let |k| be a random int in (1, |values| - 1), using Canon's method.
-4. Let |k1| be |k| >> 2, and |k2| be the low 2 bits of |k|.
-5. If abs(|min|) <= abs(|max|), return 4\*(|max|/4 - |k1|\*|step|) - |k2|\*|step|.
-	Otherwise, return 4\*(|min|/4 - k1\*|step|) + |k2|\*|step|.
+4. Multiply with 54 bits of precision:
+	1. Let |k1| be |k| >> 2, and |k2| be the low 2 bits of |k|.
+	2. If abs(|min|) <= abs(|max|), return 4\*(|max|/4 - |k1|\*|step|) - |k2|\*|step|.
+		Otherwise, return 4\*(|min|/4 - k1\*|step|) + |k2|\*|step|.
 
 
 ceilint(|a|, |b|, |g|), implements ceil((b-a)/g) perfectly, and without overflow
