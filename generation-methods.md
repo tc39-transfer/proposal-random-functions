@@ -17,7 +17,7 @@ Used by Rust/numpy
 
 ## Number in (0, 1)
 
-Invented by TAB, closely follows <https://www.corsix.org/content/higher-quality-random-floats>
+Invented by me, closely follows <https://www.corsix.org/content/higher-quality-random-floats>
 
 1. Pull 128 bits.
 2. Put 52 bits into the mantissa of an f64.
@@ -44,7 +44,7 @@ Invented by TAB, closely follows <https://www.corsix.org/content/higher-quality-
 6. Add the high 64 to the leftover. If the result overflows, +1 to result.
 7. Cast result back to Number. 
 
-* 128 bits used; 64 or 128 bits consumed.
+* 64 bits used (+64 to remove bias); 64 or 128 bits consumed.
 * Bias is less than 2^-64 (would require >= 2^128 samples to notice).
 * Can skip the second 64 bits pull if leftover+max-1 doesn't overflow (result can't change), or if result is >= 2^53 and bottom N bits aren't all 1 (+1 won't change the Number)
 * Handles any [min, max] where min+max+1 < 2^64. (Second early-exit should be if result is >= 2^54, to be safe.)
@@ -76,7 +76,7 @@ Trivial, already ubiquitous in the literature.
 * Same bits used/consumed as (0,1) range (except when rejection occurs).
 * Rejection should be extremely rare.
 * Straightforward and easy to understand.
-* Not remotely uniform in many cases, very bad properties in general.
+* Not remotely uniform in many cases, bad properties in general.
 * Without rejection, can easily generate |min| or |max| for many possible bounds, even small ones.
 
 ## Number in (min, max)
@@ -102,7 +102,7 @@ function γsectionOO(a,b)
 	Otherwise, return 4\*(|min|/4 - k1\*|step|) + |k2|\*|step|.
 
 
-ceilint(|a|, |b|, |g|), implements (b-a)/g perfectly, and without overflow
+ceilint(|a|, |b|, |g|), implements ceil((b-a)/g) perfectly, and without overflow
 
 1. Let s = b/g - a/g.
 2. If s is not an integer, return ceil(s).
@@ -111,3 +111,12 @@ ceilint(|a|, |b|, |g|), implements (b-a)/g perfectly, and without overflow
 	Otherwise, let |eps| = b/g - (s + a/g).
 5. If |eps| > 0, set |s| to |s|+1.
 6. Return |s|.
+
+* 52-54 bits of precision; 128 bits consumed.
+* Perfectly uniform, and equidistributed.
+* No rejection sampling at all.
+* Generates all possible floats in the highest exponent; etc, same as the [0,1) method above.
+* Could modify it to consume 64 more bits to densely generate floats, if desired.
+	* If in the next exponent down, take 1 bit to decide between the two possible floats. If two exponents down, take 2 bits. etc.
+	* Like, if one endpoint is 2^54, all values generated are even ints right now. Probably good to avoid that.
+	* min(52, Max exponent - result exponent) = number of bits to fill in on the little end of mantissa. Special case for 0: consume one extra bit for sign (if needed), and count leading 0s from 11 bits to push the exponent range even lower.
