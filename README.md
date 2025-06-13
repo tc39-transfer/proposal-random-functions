@@ -30,6 +30,7 @@ returns `lo` or `hi` at random.)
 
 > [!NOTE]
 > [Issue 19](https://github.com/tc39/proposal-random-functions/issues/19) The exact algorithm is not yet decided.
+> Also see [Issue 20](https://github.com/tc39/proposal-random-functions/issues/20) about whether the interval is half-open or closed, and what options are allowed.
 
 If `step` is passed,
 returns a random `Number` of the form `lo + N*step`,
