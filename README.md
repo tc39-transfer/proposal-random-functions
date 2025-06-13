@@ -28,7 +28,7 @@ with a uniform distribution.
 (If there are no floats between `lo` and `hi`,
 returns `lo` or `hi` at random.)
 
-> [!ISSUE]
+> [!NOTE]
 > [Issue 19](https://github.com/tc39/proposal-random-functions/issues/19) The exact algorithm is not yet decided.
 
 If `step` is passed,
