@@ -29,7 +29,7 @@ with a uniform distribution.
 returns `lo` or `hi` at random.)
 
 > [!ISSUE]
-> The exact algorithm is not yet decided.
+> [Issue 19](https://github.com/tc39/proposal-random-functions/issues/19) The exact algorithm is not yet decided.
 
 If `step` is passed,
 returns a random `Number` of the form `lo + N*step`,
